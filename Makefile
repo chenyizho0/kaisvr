@@ -1,2 +1,2 @@
-test:test.cpp
-	g++ -o test test.cpp
+testsvr:testsvr.cpp Poller.h
+	g++ -o testsvr testsvr.cpp
