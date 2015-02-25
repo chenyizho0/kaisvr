@@ -73,6 +73,10 @@ int Poller::add_fd(int fd)
 	}
 	all_fds_.push_back(fd);
 	FD_SET(fd,&allset_);
+	if (max_fd_num_ < fd)
+	{
+		max_fd_num_ = fd;
+	}
 	return 0;
 }
 

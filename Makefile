@@ -1,2 +1,2 @@
-testsvr:testsvr.cpp Poller.h
-	g++ -o testsvr testsvr.cpp
+echosvr:EchoSvr.cpp Poller.h EventLoop.h TcpServer.h
+	g++ -o echosvr EchoSvr.cpp

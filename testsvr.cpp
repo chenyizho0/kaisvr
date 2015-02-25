@@ -52,19 +52,26 @@ int main()
 	vector<int> active_fds;
 	while(1)
  	{
+		vector<int> tmpfds = poller_.all_fds();
+		for (size_t i = 0;i < tmpfds.size();i++)
+		{
+			printf("%d ",tmpfds[i]);
+		}
+		printf("\n");
 		int nready = poller_.poller(active_fds);
  	 	if (nready < 0)   //nready代表有几个文件描述已经准备好
 		{
-			printf("poller errro\n");
+			printf("poller error\n");
 			break;
 		}
+		printf("nready = %d\n",nready);
 		for (size_t i = 0;i < active_fds.size();i++)
 		{
 			if (active_fds[i] == socketSrv)
 			{
 				int  connfd= accept(socketSrv,(struct sockaddr*)&addrClt,(socklen_t*)(&len));
 				poller_.add_fd(connfd);
-				printf("accept new connection fd = %d\n",active_fds[i]);
+				printf("accept new connection fd = %d\n",connfd);
 			}
 			else
 			{
@@ -82,11 +89,11 @@ int main()
 					printf("service receive:%s\n",buf);    
 					sprintf(buf2,"server dispatcmsg:%s",buf);    
 					vector<int> all_fds = poller_.all_fds();
-					for (size_t i = 0;i < all_fds.size();i++)
+					for (size_t j = 0;j < all_fds.size();j++)
 					{    
-						if (all_fds[i] != socketSrv)
+						if (all_fds[j] != socketSrv && all_fds[j]!=active_fds[i])
 						{
-							if(send(all_fds[i],buf2,strlen(buf2)+1,0)<0) perror("send");  //群发
+							if(send(all_fds[j],buf2,strlen(buf2)+1,0)<0) perror("send");  //群发
 								printf("send to client %d\n",i);
 						}
 					}  
